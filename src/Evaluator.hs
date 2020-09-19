@@ -34,12 +34,13 @@ expandString [] _ = []
 expandString (atom:atoms) rules =
   case getRuleContent atom rules of
     Just ruleContent -> ruleContent ++ expandString atoms rules
-    Nothing -> error "Missing rule."
+    Nothing          -> error "Missing rule."
 
 getFirstGeneration :: System -> Maybe [Atom]
 getFirstGeneration system =
   case getAxiom system of
     Just (Axiom axiom) -> Just axiom
+    Just _             -> error "Missing axiom."
     Nothing            -> Nothing
 
 getRuleContainer :: System -> RuleContainer
