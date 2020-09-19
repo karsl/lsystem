@@ -49,32 +49,18 @@ parseTokens :: [Token] -> Maybe System
 parseTokens = parse parseSystem
 
 parseSystem :: Parser Token System
-parseSystem = do
-  headers <- many parseHeader
-  rules <- some parseRule
-  return $ System headers rules
+parseSystem = System <$> many parseHeader <*> some parseRule
 
 parseHeader :: Parser Token Header
 parseHeader = parseAxiom <|> parseAngle
   where
-    parseAxiom = do
-      literal TokenAxiom
-      axioms <- many parseAtom
-      return $ Axiom axioms
-    parseAngle = do
-      literal TokenAngle
-      angle <- msatisfies getNumber
-      return $ Angle angle
-      where
-        getNumber (TokenNumber n) = Just n
-        getNumber _               = Nothing
+    parseAxiom = Axiom <$> many parseAtom <* literal TokenAxiom
+    parseAngle = Angle <$> msatisfies getNumber <* literal TokenAngle
+    getNumber (TokenNumber n) = Just n
+    getNumber _               = Nothing
 
 parseRule :: Parser Token Rule
-parseRule = do
-  ruleName <- parseAtom
-  literal TokenRightArrow
-  ruleContent <- many parseAtom
-  return $ Rule ruleName ruleContent
+parseRule = Rule <$> parseAtom <* literal TokenRightArrow <*> many parseAtom
 
 parseAtom :: Parser Token Atom
 parseAtom = parseSymbol <|> parseId
