@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fa40396f97e03a73f11b5d897f83c5ce16955f751abb0ee15111afe207e3e273
+-- hash: 742ee6bb37d442745e0d3ab1ac2d7fa1c3212f707015c1d92cecc6672245b3bb
 
 name:           lsystem
 version:        0.1.0.0
@@ -30,7 +30,6 @@ library
       Drawer
       Evaluator
       Lexer
-      Lib
       Parser
       ParserCombinators
       Simulator
