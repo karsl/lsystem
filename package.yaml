@@ -1,0 +1,54 @@
+name:                lsystem
+version:             0.1.0.0
+github:              "karsl/lsystem"
+license:             BSD3
+author:              "Kaan Arslan"
+maintainer:          "kaan.arslan@ceng.deu.edu.tr"
+copyright:           "2020 Kaan Arslan"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/karsl/lsystem#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- mtl
+- containers
+- AC-Angle
+- gloss
+
+library:
+  source-dirs: src
+
+executables:
+  lsystem-exe:
+    main:                Main
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lsystem
+    - optparse-applicative
+
+tests:
+  lsystem-test:
+    main:                Spec
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - lsystem
+    - hspec
