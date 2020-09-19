@@ -1,6 +1,7 @@
 module Drawer
   ( displayPicture
   , drawLines
+  , Picture
   ) where
 
 import           Graphics.Gloss

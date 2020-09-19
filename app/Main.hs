@@ -1,8 +1,25 @@
 module Main where
 
 import           Drawer
-import           Facade
 import           Options.Applicative
+
+import           Data.Angle
+import           Evaluator
+import           Lexer
+import           Parser
+import           Prelude    hiding (lex)
+import           Simulator
+
+getPicture :: String -> Int -> Maybe Picture
+getPicture string numberOfGenerations = do
+  lexed <- lex string
+  parsed <- parseTokens lexed
+  rotationAngleHeader <- getAngle parsed
+  let rotationAngle = Degrees . fromInteger . (\(Angle angle) -> angle) $ rotationAngleHeader
+  let (actions, _) = last . take numberOfGenerations . eval $ parsed
+  let (_, lines) = runSimulator (doActions actions rotationAngle) initialLocation
+  let picture = drawLines lines
+  return picture
 
 data Options = Options
   { systemString :: String

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c1aebb903e27e51d6741e53357b43d72de157c1e681cb2f02db135ec551704d1
+-- hash: 4aa421645e33a1c9c27776f4a3b35065ba0ee772d0c569d7d069592d55bf2d6f
 
 name:           lsystem
 version:        0.1.0.0
@@ -29,7 +29,6 @@ library
   exposed-modules:
       Drawer
       Evaluator
-      Facade
       Lexer
       Lib
       Parser
