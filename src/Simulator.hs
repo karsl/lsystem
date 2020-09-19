@@ -25,11 +25,12 @@ type Position = (Unit, Unit)
 type Line = (Position, Position)
 
 data Location = Location
-  { position :: Position
-  , angle    :: Degrees Unit
-  , stack    :: Stack (Position, Degrees Unit)
+  { _position :: Position
+  , _angle    :: Degrees Unit
+  , _stack    :: Stack (Position, Degrees Unit)
   } deriving (Eq, Show)
 
+initialLocation :: Location
 initialLocation = Location (0, 0) 90 Stack.emptyStack
 
 moveForward, moveBackward, pushStack, popStack :: Location -> Location
@@ -44,7 +45,7 @@ rotateLeft (Location (x, y) angle stack) rotationAngle = Location (x, y) (angle 
 
 pushStack (Location position angle stack) = Location position angle (stackPush (position, angle) stack)
 
-popStack location@(Location (x, y) angle stack) =
+popStack location@(Location (_, _) _ stack) =
   case stackPop stack of
     Just ((nextPosition, nextAngle), stack') -> Location nextPosition nextAngle stack'
     Nothing -> location
@@ -56,11 +57,11 @@ writeAction RotateLeft location rotationAngle = return $ rotateLeft location rot
 writeAction RotateRight location rotationAngle = return $ rotateRight location rotationAngle
 writeAction DrawForward location _ = do
   let forwardLocation = moveForward location
-  tell [(position location, position forwardLocation)]
+  tell [(_position location, _position forwardLocation)]
   return forwardLocation
 writeAction DrawBackward location _ = do
   let backwardLocation = moveBackward location
-  tell [(position location, position backwardLocation)]
+  tell [(_position location, _position backwardLocation)]
   return backwardLocation
 writeAction PushPosition location _ = return $ pushStack location
 writeAction PopPosition location _ = return $ popStack location
@@ -68,13 +69,13 @@ writeAction PopPosition location _ = return $ popStack location
 doActions :: [Action] -> Degrees Unit -> StateT Location (Writer [Line]) Location
 doActions actions rotationAngle = foldl (\monad action -> monad >> doAction action rotationAngle) baseMonad actions
   where
-    baseMonad = StateT $ \currentLocation@(Location position _ _) -> writer ((currentLocation, currentLocation), [])
+    baseMonad = StateT $ \currentLocation@(Location _ _ _) -> writer ((currentLocation, currentLocation), [])
 
 doAction :: Action -> Degrees Unit -> StateT Location (Writer [Line]) Location
 doAction action rotationAngle =
   StateT $ \currentLocation ->
-    let (nextLocation@(Location position _ _), line) = runWriter $ writeAction action currentLocation rotationAngle
+    let (nextLocation@(Location _ _ _), line) = runWriter $ writeAction action currentLocation rotationAngle
      in writer ((currentLocation, nextLocation), line)
 
 runSimulator :: StateT Location (Writer [Line]) Location -> Location -> ((Location, Location), [Line])
-runSimulator simulator initialLocation = runWriter (runStateT simulator initialLocation)
+runSimulator simulator location = runWriter (runStateT simulator location)

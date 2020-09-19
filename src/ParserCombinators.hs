@@ -1,5 +1,5 @@
 module ParserCombinators
-  (satisfies, msatisfies, literal, character, digit, positiveNumber, string, parse)
+  (satisfies, msatisfies, literal, character, digit, positiveNumber, string, parse, Parser)
   where
 
 import Data.Char

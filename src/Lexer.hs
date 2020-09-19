@@ -26,6 +26,7 @@ lex = parse $ some (skipSpace *> pTok) <* skipSpace
   where
     skipSpace = many (satisfies isSpace)
 
+pTok :: Parser Char Token
 pTok =
   tokenizeDrawForward <|>
   tokenizeDrawBackward <|>
@@ -40,6 +41,10 @@ pTok =
   tokenizeRightArrow <|>
   tokenizeId <|>
   tokenizeNumber
+
+tokenizeDrawForward, tokenizeDrawBackward, tokenizeMoveForward, tokenizeMoveBackward,
+  tokenizeRotateRight, tokenizeRotateLeft, tokenizePushPosition, tokenizePopPosition,
+  tokenizeAxiom, tokenizeAngle, tokenizeRightArrow, tokenizeId, tokenizeNumber :: Parser Char Token
 
 tokenizeDrawForward = TokenDrawForward <$ literal 'F'
 

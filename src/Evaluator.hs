@@ -30,7 +30,7 @@ getNextGeneration rules = do
     isSymbol _          = False
 
 expandString :: [Atom] -> RuleContainer -> [Atom]
-expandString [] rules = []
+expandString [] _ = []
 expandString (atom:atoms) rules =
   case getRuleContent atom rules of
     Just ruleContent -> ruleContent ++ expandString atoms rules

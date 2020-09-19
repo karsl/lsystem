@@ -7,7 +7,7 @@ import           Data.Angle
 import           Evaluator
 import           Lexer
 import           Parser
-import           Prelude    hiding (lex)
+import           Prelude    hiding (lex, lines)
 import           Simulator
 
 getPicture :: String -> Int -> Maybe Picture
@@ -22,8 +22,8 @@ getPicture string numberOfGenerations = do
   return picture
 
 data Options = Options
-  { systemString :: String
-  , generation   :: Int
+  { _systemString :: String
+  , _generation   :: Int
   }
 
 applyOptions :: Options -> IO ()

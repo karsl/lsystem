@@ -48,11 +48,13 @@ data Action
 parseTokens :: [Token] -> Maybe System
 parseTokens = parse parseSystem
 
+parseSystem :: Parser Token System
 parseSystem = do
   headers <- many parseHeader
   rules <- some parseRule
   return $ System headers rules
 
+parseHeader :: Parser Token Header
 parseHeader = parseAxiom <|> parseAngle
   where
     parseAxiom = do
@@ -67,12 +69,14 @@ parseHeader = parseAxiom <|> parseAngle
         getNumber (TokenNumber n) = Just n
         getNumber _               = Nothing
 
+parseRule :: Parser Token Rule
 parseRule = do
   ruleName <- parseAtom
   literal TokenRightArrow
   ruleContent <- many parseAtom
   return $ Rule ruleName ruleContent
 
+parseAtom :: Parser Token Atom
 parseAtom = parseSymbol <|> parseId
   where
     parseSymbol = Symbol <$> msatisfies getActionM
